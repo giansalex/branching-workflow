@@ -1,7 +1,7 @@
 {
   "name": "branching-workflow",
   "version": "1.0.0",
-  "description": "",
+  "description": "Keep your Branching Model from Pull Request.",
   "author": "Giancarlos Salas <giansalex@gmail.com> (https://github.com/giansalex/branching-workflow)",
   "license": "ISC",
   "repository": "https://github.com/giansalex/branching-workflow.git",

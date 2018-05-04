@@ -1,6 +1,8 @@
-# branching-workflow
+# Branching Workflow - Bot
 
-> a GitHub App built with [probot](https://github.com/probot/probot) that 
+Keep your Branching Model from Pull Request.
+
+> A GitHub App built with [probot](https://github.com/probot/probot). 
 
 ## Setup
 
