@@ -13,6 +13,12 @@ autoMerge:
     source: EPD
   - target: QAS
     source: QAS
+
+restrict:
+  - target: master
+    source: ppr
+  - target: ppr
+    source: qas
 ```
 
 Pull Request with title message: `[WIP]` aren't merged.
