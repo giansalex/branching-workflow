@@ -18,6 +18,7 @@ function tryMerge (config, context) {
   }
 
   if (!canMerge(payload, config.autoMerge)) {
+    log.info('Cannot Merge...');
     return;
   }
 
@@ -26,11 +27,9 @@ function tryMerge (config, context) {
   const parameters = {
     owner: payload.repository.owner.login,
     repo: payload.repository.name,
-    number: payload.number,
-    // sha: payload.pull_request.head.sha,
-    // merge_method: 'merge'
+    number: payload.number
   };
-  // console.log(parameters);
+
   github.pullRequests.merge(parameters);
 }
 
