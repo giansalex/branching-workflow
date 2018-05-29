@@ -1,4 +1,6 @@
 /* eslint-disable semi */
+const SkipMessage = '[WIP]'; // Work in Progress
+
 async function pullRequest (context) {
   const { log } = context;
   const config = await context.config('branch.yml');
@@ -18,7 +20,6 @@ function tryMerge (config, context) {
   }
 
   if (!canMerge(payload, config.autoMerge)) {
-    log.info('Cannot Merge...');
     return;
   }
 
@@ -38,6 +39,11 @@ function canMerge (payload, autoMerge) {
   const isMerged = payload.action === 'closed' && pullRequest.merged;
 
   if (isMerged) {
+    return;
+  }
+
+  const title = pullRequest.title.toUpperCase();
+  if (containsSkipMessage(title)) {
     return;
   }
 
@@ -64,6 +70,10 @@ function getSourceBranch (target, autoMerge) {
   }
 
   return null;
+}
+
+function containsSkipMessage (text) {
+  return text.indexOf(SkipMessage) > -1;
 }
 
 module.exports = pullRequest;

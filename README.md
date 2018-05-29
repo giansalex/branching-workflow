@@ -15,6 +15,8 @@ autoMerge:
     source: QAS
 ```
 
+Pull Request with title message: `[WIP]` aren't merged.
+
 ## Setup
 
 ```sh
