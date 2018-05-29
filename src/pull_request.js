@@ -1,5 +1,6 @@
 /* eslint-disable semi */
 const SkipMessage = '[WIP]'; // Work in Progress
+const branch = require('./branch');
 
 async function pullRequest (context) {
   const { log } = context;
@@ -50,26 +51,13 @@ function canMerge (payload, autoMerge) {
   const targetBranch = pullRequest.base.ref;
   const sourceBranch = pullRequest.head.ref;
 
-  const validSource = getSourceBranch(targetBranch, autoMerge);
+  const validSource = branch.resolveSourceBranch(targetBranch, autoMerge);
 
   if (!validSource) {
     return;
   }
 
   return validSource === sourceBranch;
-}
-
-function getSourceBranch (target, autoMerge) {
-  const len = autoMerge.length;
-
-  for (let i = 0; i < len; i++) {
-    const item = autoMerge[i];
-    if (item.target === target) {
-      return item.source;
-    }
-  }
-
-  return null;
 }
 
 function containsSkipMessage (text) {
