@@ -15,7 +15,7 @@ async function workflow (context, config) {
   createStatus(payload, github);
 }
 
-function canCreateStatus(pullRequest, restrictBranches) {
+function canCreateStatus (pullRequest, restrictBranches) {
   const configSource = branch.resolveSourceBranch(pullRequest, restrictBranches);
 
   if (!configSource) {
@@ -27,7 +27,7 @@ function canCreateStatus(pullRequest, restrictBranches) {
 
 function createStatus (payload, github) {
   const parameters = {
-    context: 'BRANCH',
+    context: 'Branch Flow',
     description: "¡Shouldn't to merge this branch!",
     owner: payload.repository.owner.login,
     repo: payload.repository.name,

@@ -12,7 +12,7 @@ function getSourceBranch (target, branches) {
   return null;
 }
 
-function resolveSourceBranch(pullRequest, branches) {
+function resolveSourceBranch (pullRequest, branches) {
   const targetBranch = pullRequest.base.ref;
 
   return getSourceBranch(targetBranch, branches);
