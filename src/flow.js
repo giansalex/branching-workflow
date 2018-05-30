@@ -18,7 +18,7 @@ async function workflow (context, config) {
     owner: payload.repository.owner.login,
     repo: payload.repository.name,
     state: 'error',
-    sha: payload.head.sha
+    sha: payload.pull_request.head.sha
   };
 
   github.repos.createStatus(parameters);

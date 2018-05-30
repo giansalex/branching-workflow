@@ -26,7 +26,7 @@ async function pullRequest (context) {
 
 function checkEvent (payload) {
   const pullRequest = payload.pull_request;
-  return payload.action === 'open' && !pullRequest.merged;
+  return pullRequest.state === 'open' && !pullRequest.merged;
 }
 
 function tryMerge (config, context) {
