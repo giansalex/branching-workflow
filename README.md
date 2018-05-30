@@ -18,7 +18,9 @@ restrict:
   - target: master
     source: ppr
   - target: ppr
-    source: qas
+    source:
+      - pprfix
+      - qas
 ```
 
 Pull Request with title message: `[WIP]` aren't merged.
