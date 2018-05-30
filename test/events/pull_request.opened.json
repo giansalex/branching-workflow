@@ -2,25 +2,28 @@
     "event": "pull_request",
     "payload": {
         "action": "opened",
+        "number": 1,
         "pull_request": {
-            "number": 21,
+            "title": "This is a pr",
             "user": {
                 "login": "giansalex"
             },
-            "title": "This is a pr"
-        },
-        "head": {
-            "label": "giansalex:EPD",
-            "ref": "EPD"
-        },
-        "base": {
-            "label": "belcorp:EPD",
-            "ref": "EPD"
+            "head": {
+                "label": "giansalex:EPD",
+                "ref": "EPD",
+                "sha": "9049f1265b7d61be4a8904a9a27120d2064dab3b"
+            },
+            "base": {
+                "label": "company:EPD",
+                "ref": "EPD",
+                "sha": "9049f1265b7d61be4a8904a9a27120d2064dab3b"
+            },
+            "merged": false
         },
         "repository": {
             "name": "portal",
             "owner": {
-                "login": "belcorp"
+                "login": "giansalex"
             }
         },
         "installation": {
