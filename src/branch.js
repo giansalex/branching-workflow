@@ -14,7 +14,7 @@ function getSourceBranch (target, branches) {
 }
 
 function resolveSourceBranch (pullRequest, branches) {
-  const targetBranch = pullRequest.base.ref.toUpperCase();
+  const targetBranch = pullRequest.base.ref;
 
   return getSourceBranch(targetBranch, branches);
 }
