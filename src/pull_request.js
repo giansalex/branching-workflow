@@ -28,11 +28,11 @@ function tryMerge (config, context) {
   const { github, payload, log } = context;
   if (!config.autoMerge) {
     log.warn('AutoMerge: section not found');
-    return;
+    return false;
   }
 
-  if (!canMerge(payload, config.autoMerge)) {
-    return;
+  if (!canMerge(payload.pull_request, config.autoMerge)) {
+    return false;
   }
 
   log.info('Merge starting...');
@@ -44,9 +44,12 @@ function tryMerge (config, context) {
   };
 
   github.pullRequests.merge(parameters);
+
+  return true;
 }
 
-function canMerge (payload, autoMerge) {
+function canMerge (pullRequest, autoMerge) {
+  
   const title = pullRequest.title.toUpperCase();
   if (containsSkipMessage(title)) {
     return;
