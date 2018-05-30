@@ -63,5 +63,14 @@ describe('Branch Workflow', () => {
 
       expect(github.repos.createStatus).toHaveBeenCalled();
     });
+
+    it('No Match Branch in list', async () => {
+      event.payload.pull_request.base.ref = 'qas';
+      event.payload.pull_request.head.ref = 'soporte';
+
+      await robot.receive(event);
+
+      expect(github.repos.createStatus).toHaveBeenCalled();
+    });
   });
 });
