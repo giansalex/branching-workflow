@@ -30,7 +30,7 @@ function checkEvent (payload) {
 }
 
 function tryMerge (config, context) {
-  const { github, payload, log } = context;
+  const { github, payload } = context;
   if (!config.autoMerge) {
     return false;
   }
@@ -38,8 +38,6 @@ function tryMerge (config, context) {
   if (!canMerge(payload.pull_request, config.autoMerge)) {
     return false;
   }
-
-  log.info('Merge starting...');
 
   const parameters = {
     owner: payload.repository.owner.login,
