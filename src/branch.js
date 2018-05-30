@@ -12,11 +12,11 @@ function getSourceBranch (target, branches) {
   return null;
 }
 
-function checkBranch(pullRequest) {
+function checkBranch(pullRequest, branches) {
   const targetBranch = pullRequest.base.ref;
   const sourceBranch = pullRequest.head.ref;
 
-  const validSource = resolveSourceBranch(targetBranch, autoMerge);
+  const validSource = resolveSourceBranch(targetBranch, branches);
 
   if (!validSource) {
     return;

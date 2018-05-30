@@ -55,7 +55,7 @@ function canMerge (pullRequest, autoMerge) {
     return;
   }
 
-  return branch.checkBranch(pullRequest);
+  return branch.checkBranch(pullRequest, autoMerge);
 }
 
 function containsSkipMessage (text) {
