@@ -12,6 +12,24 @@ function getSourceBranch (target, branches) {
   return null;
 }
 
+function checkBranch(pullRequest) {
+  const targetBranch = pullRequest.base.ref;
+  const sourceBranch = pullRequest.head.ref;
+
+  const validSource = resolveSourceBranch(targetBranch, autoMerge);
+
+  if (!validSource) {
+    return;
+  }
+
+  if (Array.isArray(validSource)) {
+    return validSource.includes(sourceBranch);
+  }
+
+  return validSource === sourceBranch;
+}
+
 module.exports = {
-  resolveSourceBranch: getSourceBranch
+  resolveSourceBranch: getSourceBranch,
+  checkBranch: checkBranch
 };

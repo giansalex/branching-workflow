@@ -55,16 +55,7 @@ function canMerge (pullRequest, autoMerge) {
     return;
   }
 
-  const targetBranch = pullRequest.base.ref;
-  const sourceBranch = pullRequest.head.ref;
-
-  const validSource = branch.resolveSourceBranch(targetBranch, autoMerge);
-
-  if (!validSource) {
-    return;
-  }
-
-  return validSource === sourceBranch;
+  return branch.checkBranch(pullRequest);
 }
 
 function containsSkipMessage (text) {
