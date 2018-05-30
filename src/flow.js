@@ -4,17 +4,17 @@ const branch = require('./branch');
 async function workflow (context, config) {
   const { github, payload, log } = context;
 
-  if (payload.pull_request.action !== 'opened') {
+  if (!config.restrict) {
     return;
   }
 
-  if (canMerge(payload, config.restrict)) {
-    log.warn('Cannot Merge');
+  if (branch.checkBranch(payload.pull_request, config.restrict)) {
     return;
   }
+
   const parameters = {
     context: 'BRANCH',
-    description: 'No se debería fusionar',
+    description: "¡Shouldn't to merge this branch!",
     owner: payload.repository.owner.login,
     repo: payload.repository.name,
     state: 'error',
@@ -24,17 +24,4 @@ async function workflow (context, config) {
   github.repos.createStatus(parameters);
 }
 
-function canMerge (payload, restrict) {
-  const pullRequest = payload.pull_request;
-  const targetBranch = pullRequest.base.ref;
-  const sourceBranch = pullRequest.head.ref;
-
-  const validSource = branch.resolveSourceBranch(targetBranch, restrict);
-
-  if (!validSource) {
-    return;
-  }
-
-  return validSource === sourceBranch;
-}
 module.exports = workflow;
