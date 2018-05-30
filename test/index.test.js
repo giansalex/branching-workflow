@@ -1,5 +1,5 @@
 /* eslint-disable semi */
-const payload = require('./events/pull_request.opened');
+//const payload = require('./events/pull_request.opened');
 const {createRobot} = require('probot');
 const app = require('../index');
 const branch = require('../src/branch');
