@@ -32,7 +32,6 @@ function checkEvent (payload) {
 function tryMerge (config, context) {
   const { github, payload, log } = context;
   if (!config.autoMerge) {
-    log.warn('AutoMerge: section not found');
     return false;
   }
 
