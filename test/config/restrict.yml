@@ -1,5 +1,5 @@
 restrict:
-  - target: master
+  - target: MASTER
     source: ppr
   - target: ppr
     source: qas

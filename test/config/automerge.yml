@@ -1,9 +1,9 @@
 autoMerge:
-  - target: EPD
+  - target: epd
     source: EPD
   - target: QAS
     source: QAS
   - target: PPR
     source:
-      - pprfix
+      - PPRFIX
       - qas

@@ -54,7 +54,7 @@ describe('Branch Workflow', () => {
 
     it('Match Branch in list', async () => {
       event.payload.pull_request.base.ref = 'qas';
-      event.payload.pull_request.head.ref = 'BPT';
+      event.payload.pull_request.head.ref = 'bpt';
 
       await robot.receive(event);
 

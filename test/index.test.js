@@ -60,7 +60,7 @@ describe('Branching Workflow', () => {
 
     it('Match Branch in list', async () => {
       event.payload.pull_request.head.ref = 'ppr';
-      event.payload.pull_request.base.ref = 'qas';
+      event.payload.pull_request.base.ref = 'QAS';
       await robot.receive(payload);
 
       expect(github.pullRequests.merge).toHaveBeenCalledWith({
