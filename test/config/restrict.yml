@@ -1,0 +1,9 @@
+restrict:
+  - target: master
+    source: ppr
+  - target: ppr
+    source: qas
+  - target: qas
+    source:
+      - EPD
+      - BPT
