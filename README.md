@@ -1,5 +1,5 @@
 # Branch Workflow - Github Bot
-
+[![Build Status](https://travis-ci.org/giansalex/branching-workflow.svg?branch=master)](https://travis-ci.org/giansalex/branching-workflow)  
 AutoMerge and Branch WorkFlow Probot APP.
 
 > A GitHub App built with [probot](https://github.com/probot/probot). 
