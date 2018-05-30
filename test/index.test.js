@@ -2,6 +2,7 @@
 const payload = require('./events/pull_request.opened');
 const {createRobot} = require('probot');
 const app = require('../index');
+const branch = require('../src/branch');
 
 describe('branch-workflow', () => {
   let robot;
@@ -30,13 +31,89 @@ describe('branch-workflow', () => {
   })
 
   describe('Auto Merge', () => {
-    it('Match Branch', async () => {
+    // it('Match Branch', async () => {
       // Simulates delivery of a payload
       // payload.event is the X-GitHub-Event header sent by GitHub (for example "push")
       // payload.payload is the actual payload body
-      await robot.receive(payload);
+      // await robot.receive(payload);
       // This test would pass if in your main code you called `context.github.issues.createComment`
-      expect(github.pullRequests.merged).toHaveReturnedWith({merged: true})
+    //   expect(github.pullRequests.merge).toHaveReturnedWith({merged: true})
+    // })
+
+    it('Valid Branch Name', () => {
+      const pullRequest = {
+        base: {
+          ref: 'EPD'
+        },
+        head: {
+          ref: 'EPD'
+        }
+      };
+      const automerge = [
+        {
+          target: 'EPD',
+          source: 'EPD'
+        }
+      ];
+
+      expect(branch.checkBranch(pullRequest, automerge)).toBeTruthy();
+    })
+
+    it('Invalid Branch Name', () => {
+      const pullRequest = {
+        base: {
+          ref: 'EPD'
+        },
+        head: {
+          ref: 'QAS'
+        }
+      };
+      const automerge = [
+        {
+          target: 'EPD',
+          source: 'EPD'
+        }
+      ];
+
+      expect(branch.checkBranch(pullRequest, automerge)).toBeFalsy();
+    })
+
+    it('Valid Branch in List names', () => {
+      const pullRequest = {
+        base: {
+          ref: 'EPD'
+        },
+        head: {
+          ref: 'EPD'
+        }
+      };
+      const automerge = [
+        {
+          target: 'EPD',
+          source: ['EPD', 'DEV']
+        }
+      ];
+
+      expect(branch.checkBranch(pullRequest, automerge)).toBeTruthy();
+    })
+
+    it('Invalid Branch in List names', () => {
+      const pullRequest = {
+        base: {
+          ref: 'EPD'
+        },
+        head: {
+          ref: 'PPR'
+        }
+      };
+      const automerge = [
+        {
+          target: 'EPD',
+          source: ['EPD', 'DEV']
+        }
+      ];
+
+      expect(branch.checkBranch(pullRequest, automerge)).toBeFalsy();
     })
   })
 })
