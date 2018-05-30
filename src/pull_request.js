@@ -24,7 +24,7 @@ async function pullRequest (context) {
   flow(context, config);
 }
 
-function checkEvent(payload) {
+function checkEvent (payload) {
   const pullRequest = payload.pull_request;
   return payload.action === 'open' && !pullRequest.merged;
 }
@@ -54,7 +54,6 @@ function tryMerge (config, context) {
 }
 
 function canMerge (pullRequest, autoMerge) {
-  
   const title = pullRequest.title.toUpperCase();
   if (containsSkipMessage(title)) {
     return;
