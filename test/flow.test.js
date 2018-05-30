@@ -43,6 +43,12 @@ describe('Branch Workflow', () => {
 
       await robot.receive(event);
 
+      expect(github.repos.getContent).toHaveBeenCalledWith({
+        owner: 'giansalex',
+        repo: 'portal',
+        path: '.github/branch.yml'
+      });
+
       expect(github.repos.createStatus).not.toHaveBeenCalled();
     });
 

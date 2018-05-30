@@ -45,6 +45,12 @@ describe('Branching Workflow', () => {
     it('Match Branch', async () => {
       await robot.receive(payload);
 
+      expect(github.repos.getContent).toHaveBeenCalledWith({
+        owner: 'giansalex',
+        repo: 'portal',
+        path: '.github/branch.yml'
+      });
+
       expect(github.pullRequests.merge).toHaveBeenCalledWith({
         owner: 'giansalex',
         repo: 'portal',
