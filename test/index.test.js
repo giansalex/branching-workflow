@@ -1,10 +1,10 @@
 /* eslint-disable semi */
-const event = require('./events/pull_request.opened');
-const { payload } = event;
+const payload = require('./events/pull_request.opened');
 const { createRobot } = require('probot');
 const app = require('../index');
+const fs = require('fs');
 
-describe('branch-workflow', () => {
+describe('Branching Workflow', () => {
   let robot;
   let github;
 
@@ -15,14 +15,15 @@ describe('branch-workflow', () => {
     app(robot);
     // This is an easy way to mock out the GitHub API
     github = {
-      issues: {
-        createComment: jest.fn().mockReturnValue(Promise.resolve({
-          // Whatever the GitHub API should return
-        }))
-      },
       pullRequests: {
-        merge: jest.fn().mockReturnValue(Promise.resolve({
-          merged: true
+        merge: jest.fn()
+      },
+      repos: {
+        createStatus: jest.fn(),
+        getContent: jest.fn().mockReturnValue(Promise.resolve({
+          data: {
+            content: fs.readFileSync('./test/config/automerge.yml').toString('base64')
+          }
         }))
       }
     };
@@ -31,13 +32,23 @@ describe('branch-workflow', () => {
   });
 
   describe('Auto Merge', () => {
-    // it('Match Branch', async () => {
-      // Simulates delivery of a payload
-      // payload.event is the X-GitHub-Event header sent by GitHub (for example "push")
-      // payload.payload is the actual payload body
-      // await robot.receive(payload);
-      // This test would pass if in your main code you called `context.github.issues.createComment`
-    //   expect(github.pullRequests.merge).toHaveReturnedWith({merged: true})
-    // })
+    it('Match Branch', async () => {
+      await robot.receive(payload);
+
+      expect(github.pullRequests.merge).toHaveBeenCalledWith({
+        owner: 'giansalex',
+        repo: 'portal',
+        number: 1
+      });
+    });
+
+    it('No Match Branch', async () => {
+      let cloned = Object.assign({}, payload);
+      cloned.payload.pull_request.head.ref = 'QAS';
+
+      await robot.receive(cloned);
+
+      expect(github.pullRequests.merge).not.toHaveBeenCalled();
+    });
   });
 });
