@@ -5,6 +5,7 @@
         "number": 1,
         "pull_request": {
             "title": "This is a pr",
+            "state": "open",
             "user": {
                 "login": "giansalex"
             },
