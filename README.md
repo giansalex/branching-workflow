@@ -23,7 +23,7 @@ restrict:
       - qas
 ```
 
-Pull Request with title message: `[WIP]` aren't merged.
+Pull Request with title `[WIP]` aren't merged.
 
 ## Setup
 
