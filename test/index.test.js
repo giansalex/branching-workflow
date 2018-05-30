@@ -1,5 +1,7 @@
 /* eslint-disable semi */
-const {createRobot} = require('probot');
+const event = require('./events/pull_request.opened');
+const { payload } = event;
+const { createRobot } = require('probot');
 const app = require('../index');
 const branch = require('../src/branch');
 
@@ -27,7 +29,7 @@ describe('branch-workflow', () => {
     };
     // Passes the mocked out GitHub API into out robot instance
     robot.auth = () => Promise.resolve(github)
-  })
+  });
 
   describe('Auto Merge', () => {
     // it('Match Branch', async () => {
@@ -40,14 +42,8 @@ describe('branch-workflow', () => {
     // })
 
     it('Valid Branch Name', () => {
-      const pullRequest = {
-        base: {
-          ref: 'EPD'
-        },
-        head: {
-          ref: 'EPD'
-        }
-      };
+      const pullRequest = payload.pull_request;
+      pullRequest.head.ref = 'EPD';
       const automerge = [
         {
           target: 'EPD',
@@ -56,17 +52,12 @@ describe('branch-workflow', () => {
       ];
 
       expect(branch.checkBranch(pullRequest, automerge)).toBeTruthy();
-    })
+    });
 
     it('Invalid Branch Name', () => {
-      const pullRequest = {
-        base: {
-          ref: 'EPD'
-        },
-        head: {
-          ref: 'QAS'
-        }
-      };
+      const pullRequest = payload.pull_request;
+      pullRequest.head.ref = 'QAS';
+
       const automerge = [
         {
           target: 'EPD',
@@ -75,17 +66,11 @@ describe('branch-workflow', () => {
       ];
 
       expect(branch.checkBranch(pullRequest, automerge)).toBeFalsy();
-    })
+    });
 
     it('Valid Branch in List names', () => {
-      const pullRequest = {
-        base: {
-          ref: 'EPD'
-        },
-        head: {
-          ref: 'EPD'
-        }
-      };
+      const pullRequest = payload.pull_request;
+      pullRequest.head.ref = 'EPD';
       const automerge = [
         {
           target: 'EPD',
@@ -94,17 +79,12 @@ describe('branch-workflow', () => {
       ];
 
       expect(branch.checkBranch(pullRequest, automerge)).toBeTruthy();
-    })
+    });
 
     it('Invalid Branch in List names', () => {
-      const pullRequest = {
-        base: {
-          ref: 'EPD'
-        },
-        head: {
-          ref: 'PPR'
-        }
-      };
+      const pullRequest = payload.pull_request;
+      pullRequest.head.ref = 'PPR';
+
       const automerge = [
         {
           target: 'EPD',
@@ -113,6 +93,6 @@ describe('branch-workflow', () => {
       ];
 
       expect(branch.checkBranch(pullRequest, automerge)).toBeFalsy();
-    })
-  })
-})
+    });
+  });
+});
