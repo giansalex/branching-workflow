@@ -59,7 +59,13 @@ function canMerge (pullRequest, autoMerge) {
     return;
   }
 
-  return branch.checkBranch(pullRequest, autoMerge);
+  const configSource = branch.resolveSourceBranch(pullRequest, autoMerge);
+
+  if (!configSource) {
+    return false;
+  }
+
+  return branch.checkBranch(pullRequest, configSource);
 }
 
 function containsSkipMessage (text) {

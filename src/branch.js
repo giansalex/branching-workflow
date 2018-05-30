@@ -12,24 +12,23 @@ function getSourceBranch (target, branches) {
   return null;
 }
 
-function checkBranch (pullRequest, branches) {
+function resolveSourceBranch(pullRequest, branches) {
   const targetBranch = pullRequest.base.ref;
+
+  return getSourceBranch(targetBranch, branches);
+}
+
+function checkBranch (pullRequest, configSource) {
   const sourceBranch = pullRequest.head.ref;
 
-  const validSource = getSourceBranch(targetBranch, branches);
-
-  if (!validSource) {
-    return;
+  if (Array.isArray(configSource)) {
+    return configSource.includes(sourceBranch);
   }
 
-  if (Array.isArray(validSource)) {
-    return validSource.includes(sourceBranch);
-  }
-
-  return validSource === sourceBranch;
+  return configSource === sourceBranch;
 }
 
 module.exports = {
-  resolveSourceBranch: getSourceBranch,
+  resolveSourceBranch: resolveSourceBranch,
   checkBranch: checkBranch
 };
