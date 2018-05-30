@@ -3,14 +3,25 @@ const SkipMessage = '[WIP]'; // Work in Progress
 const branch = require('./branch');
 
 async function pullRequest (context) {
-  const { log } = context;
+  const { log, payload } = context;
+
+  if (!checkEvent(payload)) {
+    return;
+  }
+
   const config = await context.config('branch.yml');
 
   if (!config) {
     log.warn('Branch Config cannot load');
     return;
   }
+
   tryMerge(config, context);
+}
+
+function checkEvent(payload) {
+  const pullRequest = payload.pull_request;
+  return payload.action === 'open' && !pullRequest.merged;
 }
 
 function tryMerge (config, context) {
@@ -36,13 +47,6 @@ function tryMerge (config, context) {
 }
 
 function canMerge (payload, autoMerge) {
-  const pullRequest = payload.pull_request;
-  const isMerged = payload.action === 'closed' && pullRequest.merged;
-
-  if (isMerged) {
-    return;
-  }
-
   const title = pullRequest.title.toUpperCase();
   if (containsSkipMessage(title)) {
     return;
