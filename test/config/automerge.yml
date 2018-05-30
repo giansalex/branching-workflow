@@ -3,3 +3,7 @@ autoMerge:
     source: EPD
   - target: QAS
     source: QAS
+  - target: PPR
+    source:
+      - pprfix
+      - qas
