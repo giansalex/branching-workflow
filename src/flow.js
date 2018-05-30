@@ -2,7 +2,7 @@
 const branch = require('./branch');
 
 async function workflow (context, config) {
-  const { github, payload, log } = context;
+  const { github, payload } = context;
 
   if (!config.restrict) {
     return;

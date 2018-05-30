@@ -1,6 +1,7 @@
 /* eslint-disable semi */
 const SkipMessage = '[WIP]'; // Work in Progress
 const branch = require('./branch');
+const flow = require('./flow');
 
 async function pullRequest (context) {
   const { log, payload } = context;
@@ -16,7 +17,11 @@ async function pullRequest (context) {
     return;
   }
 
-  tryMerge(config, context);
+  if (tryMerge(config, context)) {
+    return;
+  }
+
+  flow(context, config);
 }
 
 function checkEvent(payload) {
