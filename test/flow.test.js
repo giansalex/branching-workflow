@@ -17,6 +17,9 @@ describe('Branch Workflow', () => {
     app(robot);
     // This is an easy way to mock out the GitHub API
     github = {
+      pullRequests: {
+        update: jest.fn()
+      },
       repos: {
         createStatus: jest.fn(),
         getContent: jest.fn().mockReturnValue(Promise.resolve({
@@ -35,6 +38,7 @@ describe('Branch Workflow', () => {
       await robot.receive(event);
 
       expect(github.repos.createStatus).not.toHaveBeenCalled();
+      expect(github.pullRequests.update).not.toHaveBeenCalled();
     });
 
     it('Match Branch', async () => {
@@ -50,6 +54,7 @@ describe('Branch Workflow', () => {
       });
 
       expect(github.repos.createStatus).not.toHaveBeenCalled();
+      expect(github.pullRequests.update).not.toHaveBeenCalled();
     });
 
     it('Match Branch in list', async () => {
@@ -59,6 +64,7 @@ describe('Branch Workflow', () => {
       await robot.receive(event);
 
       expect(github.repos.createStatus).not.toHaveBeenCalled();
+      expect(github.pullRequests.update).not.toHaveBeenCalled();
     });
 
     it('No Match Branch', async () => {
@@ -68,6 +74,7 @@ describe('Branch Workflow', () => {
       await robot.receive(event);
 
       expect(github.repos.createStatus).toHaveBeenCalled();
+      expect(github.pullRequests.update).not.toHaveBeenCalled();
     });
 
     it('No Match Branch in list', async () => {
@@ -77,6 +84,22 @@ describe('Branch Workflow', () => {
       await robot.receive(event);
 
       expect(github.repos.createStatus).toHaveBeenCalled();
+      expect(github.pullRequests.update).not.toHaveBeenCalled();
+    });
+
+    it('Match Branch and close', async () => {
+      event.payload.pull_request.base.ref = 'ppr';
+      event.payload.pull_request.head.ref = 'epd';
+
+      await robot.receive(event);
+
+      expect(github.repos.createStatus).toHaveBeenCalled();
+      expect(github.pullRequests.update).toHaveBeenCalledWith({
+        owner: 'giansalex',
+        repo: 'portal',
+        number: 1,
+        state: 'closed'
+      });
     });
   });
 });
