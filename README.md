@@ -17,15 +17,21 @@ autoMerge:
 
 restrict:
   - target: master
-    source: ppr
+    source:
+      - ppr
+      - pprfix
     close: true
   - target: ppr
-    source:
-      - pprfix
-      - qas
+    source: qas
 ```
 
 Pull Request with title `[WIP]` aren't merged.
+
+## Github App Permissions
+- Repository metadata: **Read-only**
+- Pull requests: **Read & write**
+- Single file: **Read-only**, path: `.github/branch.yml`
+- Commit statuses: **Read & write**
 
 ## Setup
 
