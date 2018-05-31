@@ -1,5 +1,7 @@
 /* eslint-disable semi */
 const branch = require('./branch');
+const ALERT_MESSAGE = "¡Shouldn't to merge this branch!";
+const TITLE_STATUS = 'Branch Flow';
 
 async function workflow (context, config) {
   const { github, payload } = context;
@@ -27,8 +29,8 @@ function canCreateStatus (pullRequest, restrictBranches) {
 
 function createStatus (payload, github) {
   const parameters = {
-    context: 'Branch Flow',
-    description: "¡Shouldn't to merge this branch!",
+    context: TITLE_STATUS,
+    description: ALERT_MESSAGE,
     owner: payload.repository.owner.login,
     repo: payload.repository.name,
     state: 'error',

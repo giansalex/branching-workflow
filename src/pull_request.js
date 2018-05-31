@@ -1,5 +1,5 @@
 /* eslint-disable semi */
-const SkipMessage = '[WIP]'; // Work in Progress
+const SKIP_MESSAGE = '[WIP]'; // Work in Progress
 const branch = require('./branch');
 const flow = require('./flow');
 
@@ -66,7 +66,7 @@ function canMerge (pullRequest, autoMerge) {
 }
 
 function containsSkipMessage (text) {
-  return text.indexOf(SkipMessage) > -1;
+  return text.indexOf(SKIP_MESSAGE) > -1;
 }
 
 module.exports = pullRequest;
