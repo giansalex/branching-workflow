@@ -56,13 +56,13 @@ function canMerge (pullRequest, autoMerge) {
     return;
   }
 
-  const configSource = branch.resolveSourceBranch(pullRequest, autoMerge);
+  const config = branch.resolveConfigForBranch(pullRequest, autoMerge);
 
-  if (!configSource) {
+  if (!config) {
     return false;
   }
 
-  return branch.checkBranch(pullRequest, configSource);
+  return branch.checkBranch(pullRequest, config.source);
 }
 
 function containsSkipMessage (text) {

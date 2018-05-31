@@ -18,13 +18,13 @@ async function workflow (context, config) {
 }
 
 function canCreateStatus (pullRequest, restrictBranches) {
-  const configSource = branch.resolveSourceBranch(pullRequest, restrictBranches);
+  const config = branch.resolveConfigForBranch(pullRequest, restrictBranches);
 
-  if (!configSource) {
+  if (!config) {
     return false;
   }
 
-  return !branch.checkBranch(pullRequest, configSource);
+  return !branch.checkBranch(pullRequest, config.source);
 }
 
 function createStatus (payload, github) {
