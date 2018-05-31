@@ -1,12 +1,11 @@
 /* eslint-disable semi */
 const event = require('./events/pull_request.opened');
-const { payload } = event;
+const pullRequest = event.payload.pull_request;
 const branch = require('../src/branch');
 
 describe('Branch Workflow', () => {
   describe('Branch Checker', () => {
     it('Not Configured', () => {
-      const pullRequest = payload.pull_request;
       pullRequest.head.ref = 'EPD';
       const automerge = [
         {
@@ -15,11 +14,10 @@ describe('Branch Workflow', () => {
         }
       ];
 
-      expect(branch.resolveSourceBranch(pullRequest, automerge)).toBeFalsy();
+      expect(branch.resolveConfigForBranch(pullRequest, automerge)).toBeFalsy();
     });
 
     it('Configured', () => {
-      const pullRequest = payload.pull_request;
       pullRequest.head.ref = 'EPD';
       const automerge = [
         {
@@ -28,32 +26,28 @@ describe('Branch Workflow', () => {
         }
       ];
 
-      expect(branch.resolveSourceBranch(pullRequest, automerge)).toBeTruthy();
+      expect(branch.resolveConfigForBranch(pullRequest, automerge)).toBeTruthy();
     });
 
     it('Valid Branch Name', () => {
-      const pullRequest = payload.pull_request;
       pullRequest.head.ref = 'EPD';
 
       expect(branch.checkBranch(pullRequest, 'EPD')).toBeTruthy();
     });
 
     it('Invalid Branch Name', () => {
-      const pullRequest = payload.pull_request;
       pullRequest.head.ref = 'QAS';
 
       expect(branch.checkBranch(pullRequest, 'EPD')).toBeFalsy();
     });
 
     it('Valid Branch in List names', () => {
-      const pullRequest = payload.pull_request;
       pullRequest.head.ref = 'EPD';
 
       expect(branch.checkBranch(pullRequest, ['EPD', 'DEV'])).toBeTruthy();
     });
 
     it('Invalid Branch in List names', () => {
-      const pullRequest = payload.pull_request;
       pullRequest.head.ref = 'PPR';
 
       expect(branch.checkBranch(pullRequest, ['EPD', 'DEV'])).toBeFalsy();
