@@ -3,6 +3,7 @@ restrict:
     source: ppr
   - target: ppr
     source: qas
+    close: true
   - target: qas
     source:
       - EPD

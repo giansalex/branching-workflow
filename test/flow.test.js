@@ -17,6 +17,9 @@ describe('Branch Workflow', () => {
     app(robot);
     // This is an easy way to mock out the GitHub API
     github = {
+      pullRequests: {
+        update: jest.fn()
+      },
       repos: {
         createStatus: jest.fn(),
         getContent: jest.fn().mockReturnValue(Promise.resolve({
@@ -30,16 +33,25 @@ describe('Branch Workflow', () => {
     robot.auth = () => Promise.resolve(github)
   });
 
+  function setFrom (branch) {
+    event.payload.pull_request.head.ref = branch;
+  }
+
+  function setTo (branch) {
+    event.payload.pull_request.base.ref = branch;
+  }
+
   describe('Restrict', () => {
     it('Not configured', async () => {
       await robot.receive(event);
 
       expect(github.repos.createStatus).not.toHaveBeenCalled();
+      expect(github.pullRequests.update).not.toHaveBeenCalled();
     });
 
     it('Match Branch', async () => {
-      event.payload.pull_request.base.ref = 'master';
-      event.payload.pull_request.head.ref = 'ppr';
+      setFrom('ppr');
+      setTo('master');
 
       await robot.receive(event);
 
@@ -50,33 +62,52 @@ describe('Branch Workflow', () => {
       });
 
       expect(github.repos.createStatus).not.toHaveBeenCalled();
+      expect(github.pullRequests.update).not.toHaveBeenCalled();
     });
 
     it('Match Branch in list', async () => {
-      event.payload.pull_request.base.ref = 'qas';
-      event.payload.pull_request.head.ref = 'bpt';
+      setFrom('bpt');
+      setTo('qas');
 
       await robot.receive(event);
 
       expect(github.repos.createStatus).not.toHaveBeenCalled();
+      expect(github.pullRequests.update).not.toHaveBeenCalled();
     });
 
     it('No Match Branch', async () => {
-      event.payload.pull_request.base.ref = 'master';
-      event.payload.pull_request.head.ref = 'qas';
+      setFrom('qas');
+      setTo('master');
 
       await robot.receive(event);
 
       expect(github.repos.createStatus).toHaveBeenCalled();
+      expect(github.pullRequests.update).not.toHaveBeenCalled();
     });
 
     it('No Match Branch in list', async () => {
-      event.payload.pull_request.base.ref = 'qas';
-      event.payload.pull_request.head.ref = 'soporte';
+      setFrom('soporte');
+      setTo('qas');
 
       await robot.receive(event);
 
       expect(github.repos.createStatus).toHaveBeenCalled();
+      expect(github.pullRequests.update).not.toHaveBeenCalled();
+    });
+
+    it('Match Branch and close', async () => {
+      setFrom('epd');
+      setTo('ppr');
+
+      await robot.receive(event);
+
+      expect(github.repos.createStatus).toHaveBeenCalled();
+      expect(github.pullRequests.update).toHaveBeenCalledWith({
+        owner: 'giansalex',
+        repo: 'portal',
+        number: 1,
+        state: 'closed'
+      });
     });
   });
 });

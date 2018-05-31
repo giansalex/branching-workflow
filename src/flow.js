@@ -1,5 +1,7 @@
 /* eslint-disable semi */
 const branch = require('./branch');
+const ALERT_MESSAGE = "¡Shouldn't to merge this branch!";
+const TITLE_STATUS = 'Branch Flow';
 
 async function workflow (context, config) {
   const { github, payload } = context;
@@ -8,33 +10,53 @@ async function workflow (context, config) {
     return;
   }
 
-  if (!canCreateStatus(payload.pull_request, config.restrict)) {
+  const status = getStatus(payload.pull_request, config.restrict);
+  if (!status || status.valid) {
     return;
   }
 
-  createStatus(payload, github);
+  await createStatus(payload, github);
+
+  if (status.close) {
+    await closePull(payload, github);
+  }
 }
 
-function canCreateStatus (pullRequest, restrictBranches) {
-  const configSource = branch.resolveSourceBranch(pullRequest, restrictBranches);
+function getStatus (pullRequest, restrictBranches) {
+  const config = branch.resolveConfigForBranch(pullRequest, restrictBranches);
 
-  if (!configSource) {
-    return false;
+  if (!config) {
+    return null;
   }
 
-  return !branch.checkBranch(pullRequest, configSource);
+  return {
+    valid: branch.checkBranch(pullRequest, config.source),
+    close: config.close
+  };
 }
 
-function createStatus (payload, github) {
+async function createStatus (payload, github) {
   const parameters = {
-    context: 'Branch Flow',
-    description: "¡Shouldn't to merge this branch!",
+    context: TITLE_STATUS,
+    description: ALERT_MESSAGE,
     owner: payload.repository.owner.login,
     repo: payload.repository.name,
     state: 'error',
     sha: payload.pull_request.head.sha
   };
 
-  github.repos.createStatus(parameters);
+  await github.repos.createStatus(parameters);
 }
+
+async function closePull (payload, github) {
+  const parameters = {
+    owner: payload.repository.owner.login,
+    repo: payload.repository.name,
+    number: payload.number,
+    state: 'closed'
+  };
+
+  await github.pullRequests.update(parameters);
+}
+
 module.exports = workflow;

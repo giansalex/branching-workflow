@@ -1,22 +1,22 @@
 /* eslint-disable semi */
-function getSourceBranch (target, branches) {
+function getConfigBranch (target, branches) {
   const len = branches.length;
   const branch = target.toUpperCase();
 
   for (let i = 0; i < len; i++) {
     const item = branches[i];
     if (item.target.toUpperCase() === branch) {
-      return item.source;
+      return item;
     }
   }
 
   return null;
 }
 
-function resolveSourceBranch (pullRequest, branches) {
+function resolveConfigForBranch (pullRequest, branches) {
   const targetBranch = pullRequest.base.ref;
 
-  return getSourceBranch(targetBranch, branches);
+  return getConfigBranch(targetBranch, branches);
 }
 
 function checkBranch (pullRequest, configSource) {
@@ -31,6 +31,6 @@ function checkBranch (pullRequest, configSource) {
 }
 
 module.exports = {
-  resolveSourceBranch: resolveSourceBranch,
+  resolveConfigForBranch: resolveConfigForBranch,
   checkBranch: checkBranch
 };
