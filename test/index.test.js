@@ -33,7 +33,15 @@ describe('Branching Workflow', () => {
   });
 
   describe('Auto Merge', () => {
-    it('Not configured', async () => {
+    it('Skip branch merged', async () => {
+      event.payload.pull_request.merged = true;
+
+      await robot.receive(event);
+
+      expect(github.pullRequests.merge).not.toHaveBeenCalled();
+    });
+
+    it('Branch not configured', async () => {
       event.payload.pull_request.head.ref = 'epd';
       event.payload.pull_request.base.ref = 'master';
 
@@ -56,6 +64,14 @@ describe('Branching Workflow', () => {
         repo: 'portal',
         number: 1
       });
+    });
+
+    it('Skip with WIP title', async () => {
+      event.payload.pull_request.title = '[WIP] Pull 1';
+
+      await robot.receive(event);
+
+      expect(github.pullRequests.merge).not.toHaveBeenCalled();
     });
 
     it('Match Branch in list', async () => {
@@ -81,6 +97,19 @@ describe('Branching Workflow', () => {
     it('No Match Branch in list', async () => {
       event.payload.pull_request.head.ref = 'ppr';
       event.payload.pull_request.base.ref = 'epd';
+
+      await robot.receive(event);
+
+      expect(github.pullRequests.merge).not.toHaveBeenCalled();
+    });
+
+    it('Not found config file', async () => {
+      github.repos.getContent = jest.fn().mockReturnValue(new Promise(() => {
+        const error = new Error();
+        error.code = 404;
+
+        throw error;
+      }));
 
       await robot.receive(event);
 
