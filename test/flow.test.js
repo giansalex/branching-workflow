@@ -33,6 +33,14 @@ describe('Branch Workflow', () => {
     robot.auth = () => Promise.resolve(github)
   });
 
+  function setFrom (branch) {
+    event.payload.pull_request.head.ref = branch;
+  }
+
+  function setTo (branch) {
+    event.payload.pull_request.base.ref = branch;
+  }
+
   describe('Restrict', () => {
     it('Not configured', async () => {
       await robot.receive(event);
@@ -42,8 +50,8 @@ describe('Branch Workflow', () => {
     });
 
     it('Match Branch', async () => {
-      event.payload.pull_request.base.ref = 'master';
-      event.payload.pull_request.head.ref = 'ppr';
+      setFrom('ppr');
+      setTo('master');
 
       await robot.receive(event);
 
@@ -58,8 +66,8 @@ describe('Branch Workflow', () => {
     });
 
     it('Match Branch in list', async () => {
-      event.payload.pull_request.base.ref = 'qas';
-      event.payload.pull_request.head.ref = 'bpt';
+      setFrom('bpt');
+      setTo('qas');
 
       await robot.receive(event);
 
@@ -68,8 +76,8 @@ describe('Branch Workflow', () => {
     });
 
     it('No Match Branch', async () => {
-      event.payload.pull_request.base.ref = 'master';
-      event.payload.pull_request.head.ref = 'qas';
+      setFrom('qas');
+      setTo('master');
 
       await robot.receive(event);
 
@@ -78,8 +86,8 @@ describe('Branch Workflow', () => {
     });
 
     it('No Match Branch in list', async () => {
-      event.payload.pull_request.base.ref = 'qas';
-      event.payload.pull_request.head.ref = 'soporte';
+      setFrom('soporte');
+      setTo('qas');
 
       await robot.receive(event);
 
@@ -88,8 +96,8 @@ describe('Branch Workflow', () => {
     });
 
     it('Match Branch and close', async () => {
-      event.payload.pull_request.base.ref = 'ppr';
-      event.payload.pull_request.head.ref = 'epd';
+      setFrom('epd');
+      setTo('ppr');
 
       await robot.receive(event);
 
