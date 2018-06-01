@@ -15,14 +15,9 @@ FROM node:8.11-alpine AS build
 
 WORKDIR /app
 
-RUN apk add --update \
-    python \
-    python-dev \
-    py-pip \
-    build-base \
-  && apk add --update alpine-sdk \
-  && pip install virtualenv \
-  && rm -rf /var/cache/apk/*
+RUN apk add --no-cache \
+    python=2.7.14-r0 \
+    alpine-sdk=0.5-r0
 
 COPY package*.json ./
 RUN npm install --only=prod
