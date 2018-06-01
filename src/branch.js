@@ -1,17 +1,9 @@
 /* eslint-disable semi */
 
 function getConfigBranch (target, branches) {
-  const len = branches.length;
-  const branch = target.toUpperCase();
+  const targetBranch = target.toUpperCase();
 
-  for (let i = 0; i < len; i++) {
-    const item = branches[i];
-    if (item.target.toUpperCase() === branch) {
-      return item;
-    }
-  }
-
-  return null;
+  return branches.find((branch) => branch.target.toUpperCase() === targetBranch);
 }
 
 const branch = {
