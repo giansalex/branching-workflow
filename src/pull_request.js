@@ -3,30 +3,28 @@ const SKIP_MESSAGE = '[WIP]'; // Work in Progress
 const branch = require('./branch');
 const flow = require('./flow');
 
-async function pullRequest (context) {
-  const { log, payload } = context;
-
-  if (!checkEvent(payload)) {
-    return;
-  }
-
-  const config = await context.config('branch.yml');
-
-  if (!config) {
-    log.warn('Branch Config cannot load');
-    return;
-  }
-
-  if (tryMerge(config, context)) {
-    return;
-  }
-
-  flow(context, config);
+function containsSkipMessage (text) {
+  return text.indexOf(SKIP_MESSAGE) > -1;
 }
 
 function checkEvent (payload) {
   const pullRequest = payload.pull_request;
   return pullRequest.state === 'open' && !pullRequest.merged;
+}
+
+function canMerge (pullRequest, autoMerge) {
+  const title = pullRequest.title.toUpperCase();
+  if (containsSkipMessage(title)) {
+    return;
+  }
+
+  const config = branch.resolveConfigForBranch(pullRequest, autoMerge);
+
+  if (!config) {
+    return false;
+  }
+
+  return branch.checkBranch(pullRequest, config.source);
 }
 
 function tryMerge (config, context) {
@@ -50,23 +48,25 @@ function tryMerge (config, context) {
   return true;
 }
 
-function canMerge (pullRequest, autoMerge) {
-  const title = pullRequest.title.toUpperCase();
-  if (containsSkipMessage(title)) {
+async function pullRequest (context) {
+  const { log, payload } = context;
+
+  if (!checkEvent(payload)) {
     return;
   }
 
-  const config = branch.resolveConfigForBranch(pullRequest, autoMerge);
+  const config = await context.config('branch.yml');
 
   if (!config) {
-    return false;
+    log.warn('Branch Config cannot load');
+    return;
   }
 
-  return branch.checkBranch(pullRequest, config.source);
-}
+  if (tryMerge(config, context)) {
+    return;
+  }
 
-function containsSkipMessage (text) {
-  return text.indexOf(SKIP_MESSAGE) > -1;
+  flow(context, config);
 }
 
 module.exports = pullRequest;
