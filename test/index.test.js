@@ -32,6 +32,14 @@ describe('Branching Workflow', () => {
     robot.auth = () => Promise.resolve(github)
   });
 
+  function setFrom (branch) {
+    event.payload.pull_request.head.ref = branch;
+  }
+
+  function setTo (branch) {
+    event.payload.pull_request.base.ref = branch;
+  }
+
   describe('Auto Merge', () => {
     it('Skip branch merged', async () => {
       event.payload.pull_request.merged = true;
@@ -42,8 +50,8 @@ describe('Branching Workflow', () => {
     });
 
     it('Branch not configured', async () => {
-      event.payload.pull_request.head.ref = 'epd';
-      event.payload.pull_request.base.ref = 'master';
+      setFrom('epd');
+      setTo('master');
 
       await robot.receive(event);
 
@@ -75,9 +83,9 @@ describe('Branching Workflow', () => {
     });
 
     it('Match Branch in list', async () => {
-      event.payload.pull_request.head.ref = 'ppr';
-      event.payload.pull_request.base.ref = 'QAS';
-      await robot.receive(payload);
+      setFrom('QAS');
+      setTo('ppr');
+      await robot.receive(event);
 
       expect(github.pullRequests.merge).toHaveBeenCalledWith({
         owner: 'giansalex',
@@ -87,7 +95,7 @@ describe('Branching Workflow', () => {
     });
 
     it('No Match Branch', async () => {
-      event.payload.pull_request.head.ref = 'QAS';
+      setFrom('QAS');
 
       await robot.receive(event);
 
@@ -95,8 +103,17 @@ describe('Branching Workflow', () => {
     });
 
     it('No Match Branch in list', async () => {
-      event.payload.pull_request.head.ref = 'ppr';
-      event.payload.pull_request.base.ref = 'epd';
+      setFrom('ppr');
+      setTo('epd');
+
+      await robot.receive(event);
+
+      expect(github.pullRequests.merge).not.toHaveBeenCalled();
+    });
+
+    it('No Match Branch ppr', async () => {
+      setFrom('ppr');
+      setTo('QAS');
 
       await robot.receive(event);
 
