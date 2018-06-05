@@ -16,7 +16,10 @@ function getStatus (pullRequest, restrictBranches) {
 
   const notAllowFork = !config.fork;
   if (notAllowFork && isFork(pullRequest)) {
-    return null;
+    return {
+      valid: false,
+      close: config.close
+    };
   }
 
   return {
