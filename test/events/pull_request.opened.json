@@ -12,12 +12,18 @@
             "head": {
                 "label": "giansalex:EPD",
                 "ref": "EPD",
-                "sha": "9049f1265b7d61be4a8904a9a27120d2064dab3b"
+                "sha": "9049f1265b7d61be4a8904a9a27120d2064dab3b",
+                "repo": {
+                    "fork": true
+                }
             },
             "base": {
                 "label": "company:EPD",
                 "ref": "EPD",
-                "sha": "9049f1265b7d61be4a8904a9a27120d2064dab3b"
+                "sha": "9049f1265b7d61be4a8904a9a27120d2064dab3b",
+                "repo": {
+                    "fork": false
+                }
             },
             "merged": false
         },

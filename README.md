@@ -25,6 +25,7 @@ restrict:
     close: true
   - target: ppr
     source: qas
+    fork: true
 ```
 
 Pull Request with title `[WIP]` aren't merged.

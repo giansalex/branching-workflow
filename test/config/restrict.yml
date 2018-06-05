@@ -8,3 +8,4 @@ restrict:
     source:
       - EPD
       - BPT
+    fork: true
