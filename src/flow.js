@@ -3,10 +3,19 @@ const branch = require('./branch');
 const ALERT_MESSAGE = '¡Shouldn\'t to merge this branch!';
 const TITLE_STATUS = 'Branch Flow';
 
+function isFork(pullRequest) {
+  return pullRequest.head.repo.fork;
+}
+
 function getStatus (pullRequest, restrictBranches) {
   const config = branch.resolveConfigForBranch(pullRequest, restrictBranches);
 
   if (!config) {
+    return null;
+  }
+
+  const notAllowFork = !config.fork;
+  if (notAllowFork && isFork(pullRequest)) {
     return null;
   }
 
