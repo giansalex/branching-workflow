@@ -3,7 +3,7 @@ const branch = require('./branch');
 const ALERT_MESSAGE = '¡Shouldn\'t to merge this branch!';
 const TITLE_STATUS = 'Branch Flow';
 
-function isFork(pullRequest) {
+function isFork (pullRequest) {
   return pullRequest.head.repo.fork;
 }
 
