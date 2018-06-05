@@ -11,6 +11,7 @@ describe('Branch Workflow', () => {
 
   beforeEach(() => {
     event = JSON.parse(JSON.stringify(payload));
+    fork(false);
     // Here we create a robot instance
     robot = createRobot();
     // Here we initialize the app on the robot instance
@@ -33,12 +34,16 @@ describe('Branch Workflow', () => {
     robot.auth = () => Promise.resolve(github)
   });
 
-  function setFrom (branch) {
+  function from (branch) {
     event.payload.pull_request.head.ref = branch;
   }
 
-  function setTo (branch) {
+  function to (branch) {
     event.payload.pull_request.base.ref = branch;
+  }
+
+  function fork (isFork) {
+    event.payload.pull_request.head.repo.fork = isFork;
   }
 
   describe('Restrict', () => {
@@ -50,8 +55,8 @@ describe('Branch Workflow', () => {
     });
 
     it('Match Branch', async () => {
-      setFrom('ppr');
-      setTo('master');
+      from('ppr');
+      to('master');
 
       await robot.receive(event);
 
@@ -66,8 +71,8 @@ describe('Branch Workflow', () => {
     });
 
     it('Match Branch in list', async () => {
-      setFrom('bpt');
-      setTo('qas');
+      from('bpt');
+      to('qas');
 
       await robot.receive(event);
 
@@ -76,8 +81,8 @@ describe('Branch Workflow', () => {
     });
 
     it('No Match Branch', async () => {
-      setFrom('qas');
-      setTo('master');
+      from('qas');
+      to('master');
 
       await robot.receive(event);
 
@@ -86,8 +91,8 @@ describe('Branch Workflow', () => {
     });
 
     it('No Match Branch in list', async () => {
-      setFrom('soporte');
-      setTo('qas');
+      from('soporte');
+      to('qas');
 
       await robot.receive(event);
 
@@ -96,8 +101,8 @@ describe('Branch Workflow', () => {
     });
 
     it('Match Branch and close', async () => {
-      setFrom('epd');
-      setTo('ppr');
+      from('epd');
+      to('ppr');
 
       await robot.receive(event);
 
@@ -108,6 +113,33 @@ describe('Branch Workflow', () => {
         number: 1,
         state: 'closed'
       });
+    });
+
+    it('Fork Match Branch and close', async () => {
+      fork(true);
+      from('qas');
+      to('ppr');
+
+      await robot.receive(event);
+
+      expect(github.repos.createStatus).toHaveBeenCalled();
+      expect(github.pullRequests.update).toHaveBeenCalledWith({
+        owner: 'giansalex',
+        repo: 'portal',
+        number: 1,
+        state: 'closed'
+      });
+    });
+
+    it('Fork Match Branch master and close', async () => {
+      fork(true);
+      from('ppr');
+      to('master');
+
+      await robot.receive(event);
+
+      expect(github.repos.createStatus).toHaveBeenCalled();
+      expect(github.pullRequests.update).not.toHaveBeenCalledWith();
     });
   });
 });
