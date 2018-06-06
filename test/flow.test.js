@@ -70,7 +70,17 @@ describe('Branch Workflow', () => {
       expect(github.pullRequests.update).not.toHaveBeenCalled();
     });
 
-    it('Match Branch in list', async () => {
+    it('Match Branch in list - epd', async () => {
+      from('epd');
+      to('qas');
+
+      await robot.receive(event);
+
+      expect(github.repos.createStatus).not.toHaveBeenCalled();
+      expect(github.pullRequests.update).not.toHaveBeenCalled();
+    });
+
+    it('Match Branch in list - bpt', async () => {
       from('bpt');
       to('qas');
 
