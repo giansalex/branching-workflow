@@ -30,11 +30,16 @@ restrict:
 
 Pull Request with title `[WIP]` aren't merged.
 
-## Github App Permissions
-- Repository metadata: **Read-only**
-- Pull requests: **Read & write**
-- Single file: **Read-only**, path: `.github/branch.yml`
-- Commit statuses: **Read & write**
+## Github App Permissions & Events
+**Permissions**
+- Repository metadata - **Read-only**
+- Pull requests - **Read & write**
+- Single File - **Read-only**
+  - Path: `.github/branch.yml`
+- Commit statuses - **Read & write**
+
+**Events**
+- [x] Check the box for **Pull request** events
 
 ## Setup
 
