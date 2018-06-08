@@ -32,6 +32,7 @@ Pull Request with title `[WIP]` aren't merged.
 
 ## Github App Permissions & Events
 **Permissions**
+- Repository contents - **Read & write** 
 - Repository metadata - **Read-only**
 - Pull requests - **Read & write**
 - Single File - **Read-only**
