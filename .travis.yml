@@ -7,6 +7,10 @@ notifications:
 
 before_install:
   - npm install -g codecov
+  - |
+    if [ -n "$TRAVIS_TAG" ]; then
+      npm i -g glitch-deploy;
+    fi
 
 install:
   - npm install
@@ -18,3 +22,9 @@ branches:
 script:
   - npm test
   - codecov
+
+after_success:
+  - |
+    if [ -n "$TRAVIS_TAG" ]; then
+      glitch-deploy;
+    fi
