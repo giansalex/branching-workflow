@@ -1,7 +1,7 @@
 # Branch Workflow - Github Bot
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8c1f7e742472499987106c14ef3a8a9b)](https://app.codacy.com/app/giansalex/branching-workflow?utm_source=github.com&utm_medium=referral&utm_content=giansalex/branching-workflow&utm_campaign=badger)
 [![Build Status](https://travis-ci.org/giansalex/branching-workflow.svg?branch=master)](https://travis-ci.org/giansalex/branching-workflow)
 [![codecov](https://codecov.io/gh/giansalex/branching-workflow/branch/master/graph/badge.svg)](https://codecov.io/gh/giansalex/branching-workflow)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8c1f7e742472499987106c14ef3a8a9b)](https://app.codacy.com/app/giansalex/branching-workflow?utm_source=github.com&utm_medium=referral&utm_content=giansalex/branching-workflow&utm_campaign=badger)
 [![Maintainability](https://api.codeclimate.com/v1/badges/0f8d8f506402058c30a9/maintainability)](https://codeclimate.com/github/giansalex/branching-workflow/maintainability)    
 Auto Merge and Branch WorkFlow Probot APP.
 
