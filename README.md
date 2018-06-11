@@ -54,8 +54,9 @@ npm start
 
 ## Docker
 Using node alpine image.
+> You need to have `private.pem` file.
 
 ```sh
 docker build -t branch-bot .
-docker run -d -p 80:3000 -e APP_ID=<you-app-id> -e WEBHOOK_SECRET=<your-secret> --name gitbot branch-bot
+docker run -d -p 80:3000 -e APP_ID=<you-app-id> -e WEBHOOK_SECRET=<your-secret> -e PRIVATE_KEY=$(cat private.pem) --name gitbot branch-bot
 ```
