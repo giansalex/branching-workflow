@@ -3,10 +3,10 @@ FROM node:8.11-alpine AS base
 LABEL owner="Giancarlos Salas"
 LABEL maintainer="giansalex@gmail.com"
 
-ENV APP_ID ""
 ENV NODE_ENV production
+ENV APP_ID ""
 ENV WEBHOOK_SECRET development
-ENV PRIVATE_KEY_PATH ".data/private-key.pem"
+ENV PRIVATE_KEY ""
 
 EXPOSE 3000
 
